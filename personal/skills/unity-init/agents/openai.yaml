@@ -1,0 +1,7 @@
+interface:
+  display_name: "Unity Project Init"
+  short_description: "Bootstrap a Unity repository for Codex"
+  default_prompt: "Use $unity-init to prepare this Unity repository for effective Codex work."
+policy:
+  allow_implicit_invocation: true
+

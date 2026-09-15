@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "kind": "varimu_training_batch",
+  "status": "READY",
+  "batch_id": "varimu-sep-raw-v1-example-r01",
+  "created_at_utc": "2026-08-31T00:00:00Z",
+  "priority": 100,
+  "eligibility_authority": "exact_dataset_allowlist",
+  "training_objective_id": "varimu-sep-raw-v1-fixed-state-pilot-v1",
+  "model_family": "causal_hybrid_detector_state_residual",
+  "dataset": {
+    "release_repository": "OWNER/REPO",
+    "release_tag": "capture-round-example",
+    "release_url": "https://github.com/OWNER/REPO/releases/tag/capture-round-example",
+    "archive_manifest_asset_name": "archive-manifest-v1.json",
+    "archive_manifest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "metadata_code_commit": "0000000000000000000000000000000000000000",
+    "exact_allowlist_path": "capture-data/path/dataset-allowlist-v1.json",
+    "exact_allowlist_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ready_ledger_path": "training/ready/DATASET/training-consumption-v1.json",
+    "ready_ledger_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "target_variant": "raw-v1",
+    "objective_role": "primary",
+    "no_mix_group": "sep-primary-raw-v1"
+  },
+  "source_files": [
+    {
+      "path": "capture-data/path/original.wav",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "role": "original",
+      "eligible_for_training": true
+    },
+    {
+      "path": "capture-data/path/target.wav",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "role": "target",
+      "eligible_for_training": true
+    }
+  ],
+  "split_policy": {
+    "manifest_path": "capture-data/path/split-manifest.json",
+    "manifest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "whole_group_leakage_keys": ["capture_id", "session_id", "programme_family"]
+  },
+  "notes": "Replace every placeholder and validate before publication."
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "capture_id": "replace-with-stable-capture-id",
+  "condition_id": "replace-with-repeatable-condition-id",
+  "thermal_cycle_id": "replace-with-cold-start-id",
+  "claim_scope": {
+    "behavior": "bounded hardware behavior under the documented conditions",
+    "sample_rates_hz": [96000],
+    "maximum_history_seconds": 40.0,
+    "exclusions": []
+  },
+  "unit": {
+    "manufacturer": "replace",
+    "model": "replace",
+    "serial": "replace",
+    "revision": "unknown",
+    "modifications": [],
+    "gain_cell_or_tubes": "unknown",
+    "last_service_date": "unknown",
+    "health_notes": "replace"
+  },
+  "session": {
+    "started_at_utc": "2026-01-01T00:00:00Z",
+    "operator": "replace",
+    "warmup_minutes": 0.0,
+    "ambient_c": null,
+    "mains_v_rms": null,
+    "sample_rate_hz": 96000,
+    "adc_encoding": "pcm24",
+    "clock_topology": "replace",
+    "converter_dac": "replace",
+    "converter_adc": "replace"
+  },
+  "routing": {
+    "balanced": true,
+    "source_impedance_ohm": null,
+    "load_impedance_ohm": null,
+    "input_reference_tap": "replace",
+    "pads_or_splitters": [],
+    "channel_map": {
+      "input_reference": ["ref_l", "ref_r"],
+      "wet": ["wet_l", "wet_r"]
+    }
+  },
+  "calibration": {
+    "reference_dbu_rms": 4.0,
+    "reference_dbfs_rms": -18.0,
+    "verified_adc_clip_margin_db": null,
+    "loopback_capture": "replace",
+    "bypass_capture": "replace",
+    "calibrated_at_utc": "2026-01-01T00:00:00Z"
+  },
+  "stimulus": {
+    "stimulus_id": "replace",
+    "family": "replace",
+    "digital_path": "replace",
+    "sha256": "replace-with-64-lowercase-hex-characters",
+    "nominal_peak_dbfs": -12.0
+  },
+  "control_state": {
+    "mode": "replace",
+    "stereo_coupling": "replace",
+    "physical_controls": {},
+    "approach_direction": {}
+  },
+  "history": {
+    "preceding_capture_id": null,
+    "preroll_seconds": 0.0,
+    "reset_method": "replace",
+    "settling_criterion": "replace"
+  },
+  "files": {
+    "digital_input": "replace",
+    "input_reference": "replace",
+    "wet_output": "replace",
+    "raw_files_immutable": true
+  },
+  "alignment": {
+    "method": "replace",
+    "integer_delay_samples": 0,
+    "fractional_delay_samples": 0.0,
+    "drift_ppm": 0.0,
+    "raw_files_unchanged": true
+  },
+  "split": {
+    "role": "pilot",
+    "leakage_group": "replace",
+    "stimulus_group": "replace",
+    "setting_group": "replace"
+  },
+  "quality": {
+    "clipping_detected": false,
+    "dropouts_detected": false,
+    "polarity_verified": false,
+    "channel_map_verified": false,
+    "operator_review": "replace"
+  }
+}

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Goal Guard"
+  short_description: "Guard Codex goals with evidence and progress"
+  default_prompt: "Use $goal-guard to audit this active Codex goal and keep completion evidence-driven."
+policy:
+  allow_implicit_invocation: false

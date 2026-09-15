@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "varimu_completed_training_run",
+  "status": "COMPLETED",
+  "batch_id": "varimu-sep-raw-v1-example-r01",
+  "training_run_id": "run-example-001",
+  "training_objective_id": "varimu-sep-raw-v1-fixed-state-pilot-v1",
+  "claim": {
+    "machine_name": "human-readable-hostname",
+    "machine_id": "stable-generated-machine-id",
+    "claimed_at_utc": "2026-08-31T00:00:00Z",
+    "claim_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "started_at_utc": "2026-08-31T00:10:00Z",
+  "completed_at_utc": "2026-08-31T01:10:00Z",
+  "operator": "name-or-agent",
+  "claim_tier": "fixed-state uncalibrated digital-domain pilot",
+  "dataset": {
+    "source_release_repository": "shawnxxxqazwsx/mc-patcher",
+    "source_release_tag": "capture-round-example",
+    "source_release_url": "https://github.com/shawnxxxqazwsx/mc-patcher/releases/tag/capture-round-example",
+    "archive_manifest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "metadata_code_commit": "0000000000000000000000000000000000000000",
+    "exact_allowlist_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "split_manifest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ready_ledger_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "implementation": {
+    "repository": "shawnxxxqazwsx/mc-patcher",
+    "git_commit": "0000000000000000000000000000000000000000",
+    "environment_lock_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "model_family": "causal_hybrid_detector_state_residual",
+    "candidate_version": "model-v1"
+  },
+  "acceptance": {
+    "metric_registry_status": "FROZEN",
+    "comparable_metric_count": 1,
+    "missing_comparable_metric_count": 0,
+    "critical_gate_failures": [],
+    "three_way_forensics_status": "PASS",
+    "controlled_probes_status": "PASS",
+    "withheld_status": "PASS",
+    "listening_status": "PASS",
+    "realtime_status": "NOT_TESTED"
+  },
+  "artifacts": [
+    {
+      "path": "ANNOTATION.md",
+      "role": "annotation",
+      "size": 0,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "known_limits": ["Replace this placeholder with evidence-bounded limits."],
+  "reproduction_command": "Replace with the exact command or runbook entry."
+}

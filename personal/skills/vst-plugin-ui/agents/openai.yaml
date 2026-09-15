@@ -1,0 +1,6 @@
+interface:
+  display_name: "VST Plug-in UI"
+  short_description: "Design native and WebView audio plug-in/host interfaces"
+  default_prompt: "Use $vst-plugin-ui to design or implement this audio plug-in or host interface."
+policy:
+  allow_implicit_invocation: true

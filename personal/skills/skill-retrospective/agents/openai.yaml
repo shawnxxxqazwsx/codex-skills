@@ -1,0 +1,6 @@
+interface:
+  display_name: "Skill Retrospective"
+  short_description: "Turn verified task lessons into leaner reusable skills"
+  default_prompt: "Use $skill-retrospective to review this task's durable lessons and update the narrowest appropriate user-owned skill."
+policy:
+  allow_implicit_invocation: true

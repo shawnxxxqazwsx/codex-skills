@@ -1,0 +1,7 @@
+interface:
+  display_name: "Unity Development"
+  short_description: "Implement and verify changes in Unity projects"
+  default_prompt: "Use $unity-dev to implement and verify this Unity project change."
+policy:
+  allow_implicit_invocation: true
+

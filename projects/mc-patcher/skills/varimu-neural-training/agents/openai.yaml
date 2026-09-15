@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vari-Mu Neural Training"
+  short_description: "Coordinate auditable Vari-Mu neural training"
+  default_prompt: "Use $varimu-neural-training to prepare or operate an allowlist-bound Vari-Mu training batch, coordinate an atomic multi-machine claim, and validate every candidate with complete audio-render forensics."

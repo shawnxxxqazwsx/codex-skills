@@ -1,0 +1,6 @@
+interface:
+  display_name: "MIDI to Score"
+  short_description: "Let AI interpret MIDI and author readable notation"
+  default_prompt: "Use $midi-to-score to interpret my performed MIDI and write a checked full score."
+policy:
+  allow_implicit_invocation: true

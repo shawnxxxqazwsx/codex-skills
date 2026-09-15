@@ -1,0 +1,4 @@
+interface:
+  display_name: "DAW Control"
+  short_description: "安全控制和验证 REAPER、Nuendo/Cubase 及其他常见 DAW"
+  default_prompt: "使用 $daw-control 在当前 DAW 中完成我的任务；先识别宿主与工程状态，再以可验证、可回退的方式执行。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Brief Refiner"
+  short_description: "通过对答明确真实需求，并总结为准确、可复制的 AI 指令"
+  default_prompt: "使用 $task-brief-refiner 先通过对答帮我明确需求，在信息足够后总结成一条准确、可复制的 AI 指令。"

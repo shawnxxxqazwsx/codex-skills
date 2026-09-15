@@ -1,0 +1,6 @@
+interface:
+  display_name: "Save Tokens"
+  short_description: "Reduce Codex context and tool-token cost"
+  default_prompt: "Use $save-tokens to complete this task with a lean context and tool strategy."
+policy:
+  allow_implicit_invocation: false

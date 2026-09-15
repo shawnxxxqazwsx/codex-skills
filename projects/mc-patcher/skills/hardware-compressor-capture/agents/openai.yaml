@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hardware Compressor Capture"
+  short_description: "Capture physical compressors for measured emulation"
+  default_prompt: "Use $hardware-compressor-capture to design and validate a hardware compressor capture campaign."

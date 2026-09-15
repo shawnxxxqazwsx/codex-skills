@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "round_id": "replace-with-stable-round-id",
+  "session_id": "replace-with-session-id",
+  "annotation_status": "COMPLETE",
+  "completed_at_utc": "2026-01-01T00:00:00Z",
+  "handoff": {
+    "purpose": "replace with the behavior or hypothesis tested",
+    "physical_state": "replace with an exact control-state manifest or recall-sheet reference",
+    "route": "replace with the device, channel map, sample rate, clock, pads, and tap summary",
+    "capture_order": [
+      "replace with ordered capture or stimulus IDs"
+    ],
+    "anomalies": [],
+    "gates": {
+      "capture_integrity": "PASSED",
+      "alignment": "PASSED",
+      "analysis": "PASSED"
+    },
+    "known_exclusions": [],
+    "reading_order": [
+      "ROUND_NOTES.md",
+      "round-file-annotations-v1.json"
+    ],
+    "next_action": "replace with the next bounded action"
+  },
+  "files": [
+    {
+      "path": "replace/with/persistent-file.wav",
+      "sha256": "replace-with-64-lowercase-hex-characters",
+      "role": "raw_wet_capture",
+      "capture_id": "replace-with-capture-id",
+      "condition_id": "replace-with-condition-id",
+      "provenance": "replace with stimulus, raw parent, or processing-manifest reference",
+      "channel_layout": [
+        "wet_l",
+        "wet_r"
+      ],
+      "control_state_ref": "replace with session manifest, recall sheet, or exact inline state",
+      "processing": "raw_immutable",
+      "qa_status": "PILOT",
+      "training_eligible": false,
+      "use_for": [
+        "capture_integrity"
+      ],
+      "exclude_from": [
+        "production_training"
+      ],
+      "note": "replace with a concise explanation for the next agent"
+    }
+  ]
+}

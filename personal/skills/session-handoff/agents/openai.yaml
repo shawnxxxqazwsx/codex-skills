@@ -1,0 +1,6 @@
+interface:
+  display_name: "Session Handoff"
+  short_description: "Create a precise continuation brief for a new task"
+  default_prompt: "Use $session-handoff to create a continuation brief for a new Codex task."
+policy:
+  allow_implicit_invocation: true

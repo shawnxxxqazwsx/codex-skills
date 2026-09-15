@@ -1,0 +1,6 @@
+interface:
+  display_name: "Utility Chat"
+  short_description: "Handle research, configuration, and skill work"
+  default_prompt: "Use $utility-chat to handle this research or Codex configuration task thoroughly."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "kind": "varimu_forensic_objective_registry",
+  "status": "DRAFT_UNFROZEN",
+  "training_objective_id": "replace-me",
+  "selection_rule": "pareto_plus_critical_no_regression",
+  "completeness_rule": "all_numeric_target_current_metrics_must_be_reported_or_explicitly_excluded",
+  "normalization": "hardware_repeatability_sigma_or_declared_engineering_floor",
+  "aggregate": "weighted_huber_mean_plus_worst_5_percent_cvar",
+  "required_families": [
+    "direct_target_current",
+    "level_and_peak",
+    "global_and_multiscale_residual",
+    "gain_reduction_and_dynamics",
+    "gain_modulation",
+    "zero_crossing_lobes",
+    "gr_conditioned_nonlinear_residue",
+    "coherence_qualified_transfer",
+    "spectral_band_residue",
+    "stereo_image_and_correlation",
+    "controlled_thd_imd_aliasing",
+    "engineering"
+  ],
+  "critical_no_regression": [],
+  "metric_floors": [],
+  "explicit_exclusions": []
+}

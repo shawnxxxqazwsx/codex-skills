@@ -1,0 +1,6 @@
+interface:
+  display_name: "Orchestrator"
+  short_description: "Resource-aware multi-model task coordination"
+  default_prompt: "Use $orchestrator to split this complex repository task into independent evidence, implementation, verification, and review packages while retaining safe integration ownership."
+policy:
+  allow_implicit_invocation: true

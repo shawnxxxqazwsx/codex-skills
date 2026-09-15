@@ -1,0 +1,7 @@
+interface:
+  display_name: "Hardware Audio Emulation"
+  short_description: "Hardware modeling reference for mc-patcher"
+  default_prompt: "Use $hardware-audio-emulation to research, design, or validate this mc-patcher hardware emulation."
+
+policy:
+  allow_implicit_invocation: true

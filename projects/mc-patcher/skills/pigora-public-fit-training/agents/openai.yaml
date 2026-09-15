@@ -1,0 +1,7 @@
+interface:
+  display_name: "Pigora Public-Fit Training"
+  short_description: "Gate Pigora public and inference EQ fits without merging claims"
+  default_prompt: "Use $pigora-public-fit-training to fit this Pigora EQ at the 0.2 dB primary tier, use the reviewed 0.5 dB fallback only when justified, and record every withheld filter frequency as an exact module point."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "kind": "training_consumption_claim",
+  "status": "READY",
+  "created_at_utc": "YYYY-MM-DDTHH:MM:SSZ",
+  "dataset_id": "dataset-id",
+  "training_objective_id": "objective-id",
+  "model_family": "model-family",
+  "split_manifest": {
+    "path": "splits/split-version.json",
+    "size": 0,
+    "sha256": "64 lowercase hex characters"
+  },
+  "raw_sources": [
+    {
+      "path": "raw/session-id/capture.wav",
+      "size": 0,
+      "sha256": "64 lowercase hex characters"
+    }
+  ],
+  "training_inputs": [],
+  "duplicate_policy": "Block a raw SHA-256 already completed for the same training objective."
+}

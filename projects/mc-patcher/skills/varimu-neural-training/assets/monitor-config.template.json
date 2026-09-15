@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "repo": "shawnxxxqazwsx/mc-patcher",
+  "branch": "main",
+  "control_root": "varimu-training",
+  "completion_index_root": "varimu-training/release-index",
+  "local_root": "/absolute/path/to/varimu-training-workspace",
+  "machine_name": "human-readable-hostname",
+  "machine_id": "stable-generated-machine-id",
+  "gh_path": "/absolute/path/to/gh",
+  "poll_interval_seconds": 600
+}

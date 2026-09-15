@@ -1,0 +1,6 @@
+interface:
+  display_name: "Max Synth"
+  short_description: "Patch Max/MSP synthesizers with Max 9 and MSP objects"
+  default_prompt: "Use $max-synth to design or patch this Max synthesizer."
+policy:
+  allow_implicit_invocation: true
