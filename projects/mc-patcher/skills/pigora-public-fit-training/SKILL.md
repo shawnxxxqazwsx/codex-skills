@@ -30,6 +30,11 @@ search or refit solely because a task resumed.
 | Inference or sample-rate engineering adjudication | Training contract and [inference-validation.md](references/inference-validation.md) |
 | Production integration, build, or hosted verification | `mc-patcher` and its Pigora handoff reference; `vst-plugin-ui` only if editor/binding work is in scope |
 
+When a fitting or runtime design explicitly draws on Airwindows EQ code, read
+[airwindows-eq-dsp.md](references/airwindows-eq-dsp.md). It supplies candidate
+filter structures and falsifiers, never a target curve, native-control claim,
+or shortcut around the frozen Pigora acceptance gates.
+
 Use `orchestrator` for authorized independent packages and shared-resource
 coordination, not to add a controller or repetitive approval turns. An existing
 module-specific validator may be reused through the documented normalized
@@ -83,6 +88,69 @@ Use a measured baseline first, otherwise strict paired boost/cut midpoints
 where available, pooled per frequency point as defined in §3A. Flat 0 dB is
 only the declared uncovered-point fallback. Never silently regenerate a frozen
 target under the clarified aggregation rule.
+
+### Owner-authorized flat reference for sparse dBu plots
+
+When a public EQ plot reports output level in dBu but lacks a same-path bypass
+or zero-control trace, and no strict measured boost/cut pair can establish its
+baseline, the owner authorizes a **declared flat reference** for curve-shape
+modeling: map the plot's flat 0 dBu line to the plug-in's 0 dB gain and set the
+zero-control response to flat 0 dB. Subtract that declared reference from the
+plotted level at each frequency; retain the original dBu values and the exact
+normalization in the target ledger. This is an assumed baseline, not a measured
+bypass response. Do not use it when measured baseline evidence conflicts, or
+to infer missing native modes, control laws, phase, interactions, or level
+dependence. Preserve source conditions that remain unknown and the image's
+pointwise uncertainty. The normalized rows belong in a separate inference
+target, not `public-fit-domain.csv`; the unchanged 48 kHz 0.2 dB engineering
+gate and independent review still apply.
+
+For the WesAudio _Prometheus Rev4 manual's HF CUT maximum-setting plot, this
+authorization applies to the four plotted 4/8/12/20 kHz endpoint curves.
+Their color-to-detent assignment is a reviewed order inference, not a printed
+legend. Freeze that binding, the accepted finite frequency domain, excluded
+overlaps, target hash, and control mapping before formal optimization. This
+authorization supplies the reference only; it does not by itself authorize
+lower CUT steps, other sections, or a product/public-fit claim.
+
+The owner subsequently expanded the **_Prometheus-specific inference-only
+scope** to all EQ bands. For the Rev4 manual's maximum-setting plots, bind LF
+BOOST, LF CUT, and HF BOOST to the corresponding existing plug-in control's
+10 endpoint; retain the earlier HF CUT=10 binding. Bind the manual's HF BOOST
+High-Q/full-clockwise and Low-Q/full-counterclockwise plots to the two
+Bandwidth endpoints. Generate lower gain settings by proportional scaling of
+each frozen, baseline-normalized dB donor curve; generate intermediate
+Bandwidth settings only by a reviewed, source-bounded interpolation between
+the two endpoint families. Check the manual's simultaneous maximum LF
+BOOST/CUT plots as a separate interaction target rather than assuming the
+individual LF curves add. The native detent and color/trajectory bindings,
+interpolation, uncertainty, finite frequency/control grid, and exclusions must
+be frozen and independently reviewed before fitting. These are owner-authorized
+modeling assumptions, not measured gain laws or public-fit rows. Keep the
+inference-only 48 kHz per-row 0.2 dB gate and the product/public-fit boundaries.
+
+The owner also authorized a separate **WesAudio _Hyperion REV3 inference
+mapping** for the existing 500-series parametric EQ identity. Use the official
+REV3 manual's twelve LF/LMF-HMF/HF ±15 dB endpoint traces and two 150 Hz HPF
+slopes as donors, retaining their protected source holdout. Keep Bell and Shelf,
+boost and cut, and the two mid-band Q endpoints separate; the 1 kHz mid-band
+plot is one shared LMF/HMF donor family, not two independent measurements.
+Generate lower gain states by baseline-normalized dB percentage, map the ±5 dB
+Range to one third of the signed ±15 dB knob gain, and transfer native band and
+HPF frequencies by the declared donor/recipient center-frequency ratio only
+within the source-supported finite domain. Generate interior mid Q curves by
+interpolating the endpoint **dB target curves**, separately for boost and cut,
+with `t = log(Q / 0.2) / log(3.2 / 0.2)`. For a simultaneously active full EQ,
+sum the separately normalized band and HPF dB targets as a declared engineering
+idealization. Zero controls align with the authorized flat 0 dB reference when
+no valid strict paired or measured baseline covers a point. Freeze each exact
+donor, baseline, trace/Q binding, transform, control grid, observation domain,
+uncertainty and target hash with independent review before fitting. These
+generated rows are `inference-derived/source-informed approximation` only,
+must meet the separate 48 kHz per-row 0.2 dB gate, and do not promote public-fit.
+Output transfer, THD, phase, and genuine analog inter-band interaction remain
+unverified axes rather than inferred hardware claims. High-rate engineering may
+use only the separately frozen 0.5 dB rule after the full 48 kHz pass.
 
 An independent coverage review binds the complete domain and omissions before
 optimization. Keep protected holdouts inaccessible to the fitter. Use whole

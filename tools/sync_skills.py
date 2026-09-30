@@ -3,11 +3,45 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-EXTENSIONS = {'.md', '.py', '.yaml', '.yml', '.json', '.txt'}
+EXTENSIONS = {'.md', '.py', '.yaml', '.yml', '.json', '.txt',
+              '.html', '.js', '.mjs', '.sh'}
+MEDIA_SCOPES = {
+    'personal/skills/lieflat-charts': ('docs/assets/',),
+    'personal/skills/motion-web': ('assets/', 'cases/toy-flipbook/img/'),
+    'personal/skills/threejs': ('assets/',),
+}
+
+
+def export_bytes(path, key):
+    """Allow reviewed bundled media only; keep binary bytes unchanged."""
+    data = path.read_bytes()
+    if len(data) > 50 * 1024 * 1024:
+        raise ValueError(f'Oversized skill resource: {key}')
+    if path.suffix in EXTENSIONS or path.name == 'LICENSE':
+        return public_text(data.decode('utf-8').replace('\r\n', '\n').replace('\r', '\n')).encode('utf-8')
+    parts = key.split('/', 3)
+    scope, rel = '/'.join(parts[:3]), parts[3]
+    if not any(rel.startswith(prefix) for prefix in MEDIA_SCOPES.get(scope, ())):
+        raise ValueError(f'Unreviewed file type or media scope: {key}')
+    signatures = {
+        '.png': data.startswith(b'\x89PNG\r\n\x1a\n'),
+        '.jpg': data.startswith(b'\xff\xd8\xff'),
+        '.gif': data.startswith((b'GIF87a', b'GIF89a')),
+        '.webp': data[:4] == b'RIFF' and data[8:12] == b'WEBP',
+        '.mp4': data[4:8] == b'ftyp',
+    }
+    if not signatures.get(path.suffix, False):
+        raise ValueError(f'Invalid or unreviewed media format: {key}')
+    # Scan embedded text/metadata without transforming binary content.
+    embedded = data.decode('latin-1')
+    if public_text(embedded) != embedded:
+        raise ValueError(f'Private path in media metadata: {key}')
+    return data
 
 
 def public_text(text):
@@ -16,6 +50,8 @@ def public_text(text):
                   '<PROGRAM_STEMS_SOURCE>/', text)
     text = re.sub(r'/Users/[^/\n]+/Desktop/CREATING/Reaper/Mixing/',
                   '<PROGRAM_MIX_SOURCE>/', text)
+    text = re.sub(r'/Users/[^/\n]+/Documents/Codex/2026-09-26/w/outputs/crypto-research/',
+                  '<CRYPTO_RESEARCH_OUTPUT>/', text)
     if re.search(r'/Users/[^/\s]+/|/home/[^/\s]+/', text):
         raise ValueError('Unreviewed personal home path: configure a public replacement first')
     patterns = [r'gh[pousr]_[A-Za-z0-9]{30,}', r'github_pat_[A-Za-z0-9_]{30,}',
@@ -36,6 +72,7 @@ def main():
     sources = [(args.personal_root, 'personal/skills'),
                (args.project_root / '.agents/skills', 'projects/mc-patcher/skills')]
     exports = {}
+    modes = {}
     skills = []
     for source, prefix in sources:
         if not source.is_dir() or source.is_symlink():
@@ -56,10 +93,12 @@ def main():
                     raise ValueError(f'Symlink in skill: {skill.name}/{rel}')
                 if not path.is_file():
                     continue
-                if path.suffix not in EXTENSIONS:
-                    raise ValueError(f'Unreviewed file type: {skill.name}/{rel}')
                 key = f'{prefix}/{skill.name}/{rel.as_posix()}'
-                exports[key] = public_text(path.read_text(encoding='utf-8')).encode('utf-8')
+                try:
+                    exports[key] = export_bytes(path, key)
+                except ValueError as error:
+                    raise ValueError(f'{key}: {error}') from error
+                modes[key] = 0o755 if path.stat().st_mode & 0o111 else 0o644
     if not exports:
         raise ValueError('No skill files found')
     manifest = {'schema_version': 1, 'skills': skills,
@@ -89,6 +128,8 @@ def main():
         path = ROOT / key
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(exports[key])
+    for key, mode in modes.items():
+        os.chmod(ROOT / key, mode)
     for key in stale:
         (ROOT / key).unlink(missing_ok=True)
     existing.write_text(json.dumps(manifest, indent=2) + '\n')

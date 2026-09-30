@@ -19,10 +19,19 @@ Live state or controller, if any:
 Handoff artifact and integration owner:
 ```
 
-Two lanes are independent only when their manifests do not overlap for the
-phase being run. A shared repository or product is not itself a collision; a
-shared interface, mutable environment, output artifact, deployment destination,
-or live controller may be.
+Two lanes are independent when their access modes do not conflict in the
+current phase. Read-only access to the same immutable revision, frozen interface,
+or evidence is safe. Writes conflict with reads or writes that depend on the
+same mutable state. Record read/write or exclusive access in the manifest;
+include transitive dependencies, output artifacts, deployment destinations, and
+live controllers. A shared repository or product alone is not a collision.
+
+Before writing an input shared as immutable, update the affected manifests.
+Defer the write until dependent readers finish, or keep those readers on an
+identified immutable snapshot and write in isolation. Do not interrupt healthy
+readers merely to start a writer. If an input changes unexpectedly, withhold
+acceptance of affected results and rerun them against an identified stable
+revision or artifact; disjoint packages may continue.
 
 Use the narrowest lease that protects the resource. If one resource collides,
 defer only that phase and continue unrelated read-only or isolated work.

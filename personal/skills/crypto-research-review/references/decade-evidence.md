@@ -1,0 +1,23 @@
+# Ten-year industry evidence, assessed 2026-09-26
+
+## What was actually learned
+
+Public current-vintage daily observations within2016-09-26..2026-09-25 were aggregated to521 completed UTC weeks (last2026-09-20). BTC/ETH/XRP/LTC/DOGE have521 usable return weeks; BNB478, SOL335, ADA458, LINK467.72 candidate indicators cover chain activity, stablecoin supply, DeFi, industry/company equity proxies and macro controls; they are not72 full-decade series. The study reports1836 qualified contemporaneous/lead/reverse associations with sample size, Pearson/Spearman, block uncertainty, HAC and multiple-testing corrections.
+
+Selected measured coefficients and sample sizes are in [decade-coefficients.json](decade-coefficients.json). Examples: BTC/COIN same-week r≈0.577 versus prior-week COIN/current-week BTC r≈0.055; BTC/SPY≈0.213 versus0.044. These are observations in their actual overlapping periods, not causal estimates or forecast parameters. BTC/SPY same-week r changed from≈0.054 in2016–2019 to≈0.390 in2025–2026. Current regime must be checked rather than repeating a historical diversification claim.
+
+603 expanding one-feature forecast comparisons used previous own/BTC returns as the baseline; industry features were lagged2weeks to leave a full reporting-delay buffer.239 candidates reduced test error,63 improved in both2023–2024 validation and2025–2026 test. None had test improvement passing a5% BH-adjusted HAC threshold across the family. This is not proof that all information is useless: the conservative weekly delay does not evaluate minute/hour news reactions, and data vintages are not strict historical publication archives. No validated net-trading edge was established.
+
+## Decisions this evidence changes
+
+- Use contemporaneous industry relationships to describe exposure/regime, not as lead signals. Before a directional forecast, establish timing, incremental out-of-time performance beyond a price baseline, and realistic costs. A weekly relationship cannot be promoted to an hourly news strategy without new evidence.
+- Treat industry labels as historical variables. A company's current mining/AI/crypto identity cannot be projected backward through business changes, acquisitions or index reconstitutions. Broad chip/payment/gaming equities are proxies, not blockchain industry output or token demand.
+- Check metric coverage and accounting before scoring news. CoinMetrics parent stablecoin tickers aggregate some metrics across chain forms while chain-specific tickers are separate; aggregation and chain coverage vary by metric/catalog. Do not equate a parent field to authoritative issuer-wide supply without confirming scope. USD TVL and dollar volumes mechanically include token prices; addresses/transactions may include bots. Stablecoin issuance is not automatically capital buying crypto.
+- Inspect leverage points and launch/reclassification jumps before trusting a tiny p-value. In this study XRP/USDC supply had Pearson≈−0.067 and a tiny HAC q, but its block interval crossed zero and rank correlation changed sign; independent review traced a large influence to the USDC launch week. Compare rank correlation, winsor sensitivity, block intervals and subperiods. Preserve the original sample rather than deleting inconvenient data to tune a strategy.
+- Use transformed returns/changes, explicit lag direction, pairwise overlap counts and a complete hypothesis family. Correct multiple comparisons. BTC-controlled contemporaneous residual association is descriptive; future/current BTC return is not an available forecasting covariate.
+- Archive first publication time and revisions where possible. Current-vintage chains, FRED series and retrospectively adjusted prices do not establish historical availability. A full-week embargo is a sensitivity safeguard, not a substitute for publication archives. Never bridge a missing provider interval with one long change labeled weekly.
+- Keep speculative industry hypotheses unapproved when coverage is absent. This study did not obtain comparable decade-long enterprise/supply-chain, DePIN revenues or NFT real-user series; do not fill those gaps with narrative scores presented as measured correlations.
+
+## Provenance and refreshing
+
+Study artifacts: <CRYPTO_RESEARCH_OUTPUT>/decade-study/REPORT.md ; raw download-manifest.json, analysis/correlations-robust.csv, incremental-scores-with-uncertainty.csv and independent reviews. These are dated evidence, not guaranteed current facts. Recheck data definitions, source coverage and regime before reuse; version new hypotheses and use unobserved forward data. The local reference JSON is a compact evidence snapshot, not a trained forecasting model. All real-asset execution remains outside this skill.

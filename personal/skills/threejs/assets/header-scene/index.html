@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>threejs skill — cabecera</title>
+<link rel="icon" href="data:,">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; background: #05070c; }
+  canvas { display: block; }
+
+  body {
+    font-family: ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+    color: #e9eef6;
+  }
+
+  /* Rotulacion sobre el render. Se captura junto con el canvas, asi que la
+     cabecera sale de una sola pieza en vez de componerse despues. */
+  #plate {
+    position: fixed; inset: 0; pointer-events: none;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  /* Velo por la izquierda: el render tiene un lobulo especular muy brillante
+     ahi y el subtitulo desaparecia. Rotular sobre una imagen exige controlar
+     el contraste, no confiar en la sombra del texto. */
+  #plate::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(100deg,
+      rgba(4,6,11,.93) 0%, rgba(4,6,11,.80) 26%,
+      rgba(4,6,11,.34) 46%, rgba(4,6,11,0) 62%);
+  }
+  #title, #metrics { position: relative; }
+
+  #title { padding: 44px 0 0 54px; }
+  #title h1 {
+    font-size: 46px; font-weight: 660; letter-spacing: -.022em; line-height: 1;
+    color: #f4f7fb; text-shadow: 0 2px 22px rgba(0,0,0,.85);
+  }
+  #title h1 span { color: #7cc4ff; }
+  #title p {
+    margin-top: 11px; font-size: 15.5px; color: #a9b6c9; letter-spacing: .005em;
+    text-shadow: 0 1px 10px rgba(0,0,0,.9);
+  }
+  #title .kicker {
+    margin-top: 3px; font-size: 13px; color: #6f7d92;
+  }
+
+  /* Tira de metricas: se rellena con las cifras medidas por verify_scene. */
+  #metrics {
+    display: flex; align-items: stretch;
+    border-top: 1px solid rgba(150,180,220,.16);
+    background: linear-gradient(to top, rgba(5,7,12,.94), rgba(5,7,12,.55));
+    backdrop-filter: blur(3px);
+  }
+  #metrics .m {
+    padding: 13px 26px; border-right: 1px solid rgba(150,180,220,.11);
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  #metrics .m:last-child { border-right: 0; margin-left: auto; padding-right: 54px; }
+  #metrics .k {
+    font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: #67748a;
+  }
+  #metrics .v {
+    font-size: 15px; font-variant-numeric: tabular-nums; color: #dbe6f4; font-weight: 500;
+  }
+  #metrics .v.ok { color: #6ee7a8; }
+  #metrics .v.hi { color: #7cc4ff; }
+</style>
+</head>
+<body>
+
+<div id="plate">
+  <div id="title">
+    <h1>three<span>js</span> — skill de Claude Code</h1>
+    <p>three.js r185 · WebGPU y TSL · con verificación medida</p>
+    <div class="kicker">Esta imagen la generó la propia skill. Las cifras son reales.</div>
+  </div>
+
+  <div id="metrics">
+    <div class="m"><div class="k">backend</div><div class="v hi" id="m-backend">—</div></div>
+    <div class="m"><div class="k">fotogramas</div><div class="v" id="m-fps">—</div></div>
+    <div class="m"><div class="k">hilo principal</div><div class="v" id="m-cpu">—</div></div>
+    <div class="m"><div class="k">triángulos</div><div class="v" id="m-tris">—</div></div>
+    <div class="m"><div class="k">consola</div><div class="v ok" id="m-err">—</div></div>
+    <div class="m"><div class="k">auditoría de escena</div><div class="v ok" id="m-audit">—</div></div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three":         "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/webgpu":  "https://unpkg.com/three@0.185.1/build/three.webgpu.js",
+    "three/tsl":     "https://unpkg.com/three@0.185.1/build/three.tsl.js",
+    "three/addons/": "https://unpkg.com/three@0.185.1/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module" src="./main.js"></script>
+</body>
+</html>
