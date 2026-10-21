@@ -1,201 +1,122 @@
 ---
 name: chlora-operation
-description: Operate a running Chlora session through MCP for Graph routing, Strip slots, mixer controls, and hosted plug-in parameters.
+description: >-
+  Operate a running Chlora through MCP for built-in Graph nodes, routing and
+  layout, presets, Strip slots, mixer gain/mute/solo, and hosted plug-in parameters.
 ---
 
-# Chlora MCP operation
+# Chlora operation
 
-Use this skill when an AI must inspect or change a running Chlora Host
-through MCP. The MCP client is the control plane; do not infer support
-from native UI controls. Read [graph-recipes.md](references/graph-recipes.md)
-for topology recipes.
+Use MCP state and supported operations to carry out the user's requested change.
+Clara in conversational requests refers to this Chlora operation skill. Native UI
+controls alone do not prove MCP support. Existing task authorization covers its
+necessary operations; do not request approval again for a generated plan.
 
-If the client exposes only eight Chlora tools, it is using the compact profile:
-five direct reads and three discovery/invocation helpers.
-The common reads `chlora_get_state`, `chlora_graph_get_summary`,
-`chlora_find_plugins`, `chlora_list_plugins`, and `chlora_get_operation` remain
-direct. For every other operation named below or in the references, call
-`chlora_discover_tools` if the name is unknown, then
-`chlora_describe_tool({"action": "chlora_..."})` for its exact schema, and
-`chlora_invoke({"action": "chlora_...", "arguments": {...}})` to execute it.
-The action name, argument rules, Host validation, and returned state are the
-same as in the full profile. This lets a small model load only the schemas it
-needs while retaining the complete control surface.
+## Read only the relevant workflow
 
-## Operating rules
+| User intent | Reference |
+|---|---|
+| Choose or manipulate an internal Node, wrapper, container or link | [nodes.md](references/nodes.md) |
+| Serial, parallel, subset or repeated-lane routing | [fastpaths.md](references/fastpaths.md) |
+| Sidechain, sparse/reordered channels, linked copies, uneven widths | [graph-recipes.md](references/graph-recipes.md) |
+| Faders, input trim, Merge branch gain, Solo/Mute, node/slot Bypass and plug-in controls | [controls-and-plugins.md](references/controls-and-plugins.md) |
+| Save, find, recall, repeat, insert, update or delete a preset | [presets.md](references/presets.md) |
+| Arrange nodes, keep Graph operations/setups readable, simplify wires, Pins, Comments, camera or port alignment | [layout.md](references/layout.md) |
+| Tool discovery, exact schemas, session/layout and Host settings | [mcp-tool-reference.md](references/mcp-tool-reference.md) |
 
-1. Begin with `chlora_get_state`. In Graph mode, use
-   `chlora_graph_get_summary` for later planning reads. Keep `activeInstanceId`
-   as the tool's `instanceId`, plus `bindingGeneration`, graph topology/lifetime
-   tokens, mode, and stable node keys. Use `chlora_find_plugins` to resolve an
-   exact `uid` before a load; `chlora_list_plugins` also reports scan state.
-   If the installed plug-in is absent from the cached catalog, use
-   `chlora_rescan_plugins` only when a catalog scan is intended, then poll
-   `chlora_list_plugins` until `scanning` is false and search again. If the
-   exact installed VST3 path is known, `chlora_graph_add_plugin_file`,
-   `chlora_graph_load_stack_file`, or `chlora_strip_load_plugin_file` can
-   inspect and load that absolute local `.vst3` path without a catalog UID.
-   For a Graph node supply `channels`, `x`, and `y`; for Strip supply
-   `channel`, `slotIndex`, `channels`, and `start`; for an empty Stack supply
-   its `groupId` and use its configured lane widths. Poll the returned
-   operation ID; a queued file inspection is not proof of a loaded plug-in.
-2. Use the fresh binding tuple in each synchronous write's returned state.
-   After an asynchronous load, read state again. Slot indices can shift after
-   insert/remove/move; node keys and graph tokens must be rediscovered after
-   undo/redo or restore. Every bound `chlora_graph_*` call, including read-only
-   parameter listing and layout inspection, needs the complete four-field
-   tuple: `instanceId`, `bindingGeneration`, `graphTopology`, and
-   `graphLifetime`. `chlora_graph_get_summary` is the no-argument exception
-   and returns a fresh tuple. Preserve the last two as decimal JSON strings,
-   never convert them to numbers. Refresh the tuple after each Graph mutation.
-3. Poll `chlora_get_operation` for asynchronous plug-in loads and layout work.
-   Do not issue another write while the host reports a pending load/layout.
-4. Hosted parameter values are normalized `0..1`. Always use the exact
-   `parameterId` and `parameterLayout` returned by the matching list call.
-   Re-list after a stale-layout response. Meter and non-automatable parameters
-   are read-only. A sandboxed parameter's `text: "..."` means vendor display
-   formatting is still pending; re-list before interpreting its units or
-   proving a wet-only setting.
-   To show a Graph plug-in control on its node, call
-   `chlora_graph_expose_parameter` with the listed ID and current layout token;
-   read back `exposedId` and the node's exposed controls. Remove it by that
-   exposed ID. There is no need to touch the native editor for this path.
-5. Build multi-step procedures as individually checked writes. MCP does not
-   make a recipe atomic. Read back state and use `chlora_undo` when a bounded
-   recovery is appropriate; after undo/redo, rediscover identities and tokens.
-6. Keep claims bounded: this skill does not establish realtime audition,
-   complete DAW compatibility, AU behavior, or live deployment success.
-7. Before changing an existing route, identify the exact affected wires and
-   branch roles from the current state. A Group, Stack, or visual position does
-   not imply an audio connection. Keep unrelated member identities and routes.
-   For a requested exclusive destination, use `replaceExisting: true` on the
-   exact channel, bus, or Snake connection and read back that no extra feed
-   remains. This also clears extra feeds when the desired edge already exists.
-   A channel or bus replacement cannot cut through an aggregate Snake branch;
-   replace or disconnect that whole branch first, then use the exact channel
-   or bus tool if needed. Connect and disconnect logical aggregate branches
-   with the Snake tools, not with a single channel call. An ordinary extra
-   channel feed beside a Snake branch can still be disconnected individually.
-8. For requested fader or knob changes, first determine whether the control is
-   a Chlora mixer value, a Merge branch gain, or a hosted plug-in parameter.
-   Use the corresponding tool. Do not guess a normalized plug-in value from a
-   displayed dB, frequency, or percentage without reading its parameter
-   descriptor and checking the resulting readback.
-9. `chlora_open_session` takes a Chloe instance ID from 1 to 64. After opening
-   or selecting it, refresh `bindingGeneration` before any write. Close only
-   the session whose ID and binding still match the user's request; closing
-   persists that session and stops its Host processing. A live Chloe producer
-   must hold that instance ID for the session to remain mounted. If no Chloe
-   is connected, the Host can retire a newly opened session; after any timeout,
-   read `chlora_get_state` before retrying or assuming the session exists.
-10. Channel layout, speaker adaptation, and input-name writes require the
-    current `channelLayoutToken` from full state. A layout change can invalidate
-    that token, so read state again before the next layout-dependent write.
-    `chlora_set_insert_channels` and `chlora_set_output_channels` set exact bus
-    widths using the same token. Multi Mono locks Insert to Output; a linked
-    Chloe Bridge can republish its Output width, so verify subsequent state.
-11. For Q-Link, set the exact selection first with
-    `chlora_set_selected_channels` (MonoLink) or `chlora_set_selected_slots`
-    (Multichannel Strip), then set automatic sync if requested. Both selection
-    tools require a focus member and return the resulting selection. Do not
-    infer Q-Link targets from a prior UI selection. For a one-time chunk copy,
-    call `chlora_strip_sync_qlink_state` only after the source slot/lane and
-    selected compatible targets are explicit; inspect target parameters and
-    do not claim full chunk equality from the MCP reply alone.
-12. For Graph cleanup, use `chlora_graph_move_selection` to move stable node
-    keys plus an optional Comment by one native-coordinate delta. Use
-    `chlora_graph_delete_selection` for a mixed selection: pass `nodeKeys`,
-    `groupIds`, `commentIds`, and `wires` arrays, leaving unused arrays empty.
-    Copy each selected visible wire's exact endpoint/role/channel fields from
-    `chlora_graph_get_summary`; bundle wires also need width and both branch
-    fields. Refresh Graph state after deletion because node indices and
-    topology change. Check the result before further edits.
-13. Meter display, worker count, performance maximum reset, and Host zoom are
-    session-bound controls. Read `maxWorkerThreads` before changing the worker
-    count. A maximum reset may be followed immediately by new audio samples.
-    Dismiss a load notice only when state shows a completed error and its
-    `loadId` still belongs to the current session.
-14. Resolve a cached plug-in UID before setting its favorite state. Use
-    `chlora_set_plugin_favorite` with explicit `on` so retries do not toggle
-    the opposite state. `chlora_set_plugin_grouping` changes browser grouping;
-    both calls return the updated catalog.
-15. Graph camera, spatial meter display, and cable drag dead zone are WebUI
-    preferences. Use `chlora_graph_get_view_preferences` to read them, then
-    `chlora_graph_set_viewport`, `chlora_graph_set_spatial_meter`, or
-    `chlora_graph_set_cable_dead_zone` with the fresh Graph binding. Poll each
-    operation ID and read back the preference. These calls require an open,
-    visible Graph WebUI. A spatial meter can be enabled only when that side has
-    an available speaker layout. Camera changes do not change audio routing;
-    `(zoomScale: 0.7, panX: 0, panY: 0)` resets the view to 100%.
-16. For a live route, prove the least familiar connection on disconnected
-    nodes before replacing IN-to-OUT continuity. In particular, connect one
-    attached Port Snake to its intended aggregate peer and inspect the actual
-    `isBundle`/width readback before creating a large sidecar partition. If a
-    preflight fails, restore the original route before source investigation.
-    Use each write's returned state as the next binding; avoid a separate
-    summary both before and after every deterministic write. Re-read summary
-    after asynchronous work, stale binding, ambiguous structure, or when a
-    specific readback is absent from the write result. Prefer the documented
-    tool schema and this skill to repeated source searches during a live edit.
+These workflows compose. For “parallel reverb, then selected-channel delay and
+clean layout,” combine routing, controls and layout; do not restart discovery
+for each stage or read every reference by default. For any authorized Graph
+operation or test setup that adds or changes nodes or wires, keep the affected
+area readable as it is built: order paths source-to-processing-to-sink and keep
+parallel lanes and owned boundaries clear. Use layout.md instead of postponing
+readability until the end.
 
-## Surface routing
+## Bind once, reuse current state
 
-Use the state/session/mixer tools for session opening, selection, closing,
-mode changes, Insert/Output width, channel layout, speaker adaptation, input
-channel names, exact selection, Q-Link automatic sync, bypass,
-pre/master/channel gain, input/output channel mute/solo, undo, and redo.
-`chlora_clear_channel_flags` clears all active input or output mute/solo flags
-when the user requests a full reset of that flag.
-Meter mode, worker count, performance reset, zoom, and failed-load notice
-controls use the same session binding. Strip
-operations cover exact slot load, remove, move, bypass, span, layer, and
-Strip/MonoLink parameter inventory and writes. Strip input and post-insert
-channel maps use exact edges; `chlora_strip_set_route` preserves other edges
-feeding the same destination. Graph operations cover plug-in and builtin
-creation, exact MAIN and SIDECHAIN bus routing, Bundle packing,
-Snake and Merge editing, Router crosspoints, Stack creation and loading, Group
-Fanout creation and supported-width connection, Port Snake creation, Multi Link,
-cable Pins, comments, layout, and Graph parameters. Keep
-Strip channel `-1` for a shared Multichannel slot and provide an explicit lane
-for a MonoLink slot.
+1. Begin with `chlora_get_state`: identify the intended active session, mode,
+   channel names/widths and selection. Later Graph planning usually needs only
+   `chlora_graph_get_summary`. Use stable node keys and explicit Group/Comment
+   IDs; names and screen positions are not identities.
+2. Session tools require `instanceId` (state's `activeInstanceId`) and
+   `bindingGeneration`. Bound Graph tools additionally require `graphTopology`
+   and `graphLifetime` as **decimal strings**. Use each mutation's returned
+   binding/state for the next call. Refresh after async completion, restore,
+   undo/redo, a stale token or a missing result. Do not add a summary before and
+   after every deterministic mutation.
+3. `chlora_graph_get_summary` is unbound. Preset list/get/update/delete and
+   global Host preferences are also unbound; their own revision tokens apply.
+   Layout/name/Insert/Output changes require current `channelLayoutToken` from
+   full state. Exact schemas determine which tokens each call needs.
+4. Poll `chlora_get_operation` for async loads, paste, renderer/layout and view
+   operations. Finish pending work before dependent writes. Timeout means an
+   unknown outcome: retain operation/transcript and inspect state; never blindly
+   replay a load, paste or other write. Multi-step recipes are not transactions.
+5. Cache needed schemas for the current connection. In the compact profile,
+   common reads remain direct; other tools use `chlora_describe_tool` then
+   `chlora_invoke`. Discover names only when unknown. See the tool reference for
+   full-profile and stdio execution.
 
-Before loading repeated plug-ins in Graph, choose the user's processing unit.
-If one stereo plug-in should process several adjacent stereo channel pairs as
-one named channel group, create a Plugin Stack with `count` equal to the pair
-count and `width: 2`. A Stack loads one independent plug-in instance per lane;
-it does not turn a stereo plug-in into a multichannel processor. Prefer this
-over loose identical nodes when the pairs share a purpose and parameter law.
-Use a regular Group only for an explicitly requested visual or routing boundary
-around unlike nodes. For 9.1.6 ITU, verify the current channel names before
-assuming the six height channels are zero-based 10..15; three stereo lanes
-then represent FTL/FTR, MTL/MTR, RTL/RTR. Read
-[graph-recipes.md](references/graph-recipes.md) for this Stack route. Do not
-plan six-channel routing as three separate cables merely because the plug-in
-itself is stereo.
+## Choose the signal operation before writing
 
-For a route request, first decide whether each path is a one-channel MAIN edge,
-a contiguous bus, a SIDECHAIN feed, a sparse Bundle, or a Snake branch. Choose
-the matching MCP tool and use the exact zero-based endpoints. A parallel effect
-needs separate dry and wet branches, an explicit Fanout after Graph IN's
-single compact Snake output, and an explicit Merge. Do not create a second
-Graph IN Snake output merely to split the signal. Confirm the
-processor's return is wet-only from its parameter descriptor and readback
-before connecting it beside an independent dry branch. If wet-only behavior
-cannot be established, leave that routing goal unresolved. A serial per-channel
-chain needs one plug-in node per channel unless the requested plug-in and layout
-support the declared multichannel width. Read back every edge and parameter
-after the sequence; the current tool set does not offer a single atomic recipe.
+- Work at any channel count supported by the current session and processor.
+  Derive source width, destination width and each path/subset width separately;
+  never infer one from the other. Use current channel names or explicit indices,
+  validate each offset/span, and preserve mapping order. Unequal widths, odd
+  counts and mixed mono/stereo/wider partitions need explicit routing, not
+  padding to an immersive format or silently dropping leftover channels.
+- Resolve the affected channel names/order, MAIN or SIDECHAIN role, branch
+  identity and actual bus widths. Mono, stereo and wider buses use the same
+  decision process; no fixed immersive channel numbering is assumed.
+- Serial insertion replaces one path; parallel splitting duplicates a signal;
+  Merge sums; Bundle packs; Router maps. Visual grouping, a Strip layer or a
+  plug-in Stack does not itself establish parallel summing or an external wire.
+- Distinguish parallel processing from a **dry plus wet-only return**. Only the
+  latter requires establishing the effect's wet-only parameter state before
+  connecting it beside an independent dry path. Use explicit gains if requested;
+  any chosen starting balance must be reported.
+- Preserve unrelated feeds and state. Copy exact replaced wire identities from
+  current state. `replaceExisting: true` applies only to an intended exclusive
+  destination. An aggregate Snake must be disconnected/replaced as a whole;
+  restore any unselected channels that shared the replaced aggregate.
+- Snake wrapping changes incident wiring. Record all affected edges before
+  wrapping an already connected node. Prefer native exact-wire splice/insert
+  operations when they express the change without reconstruction.
+- Use an isolated capability probe only for an unfamiliar or unverified bus or
+  endpoint combination that the current schema/state cannot establish. Ordinary
+  supported routing does not require a disconnected test graph first.
 
-`chlora_strip_open_editor` and `chlora_graph_open_editor` request one native
-plug-in editor. Their replies confirm only that the request was queued;
-verify the visible window separately if that is part of the task.
-`chlora_clear_all` removes the active processing
-setup and requires `confirm: "clear"`; use it only when the user asks to clear
-that session. `chlora_set_mode` defaults to retaining plug-ins and routing. A
-destructive conversion needs
-`allowPluginLoss: true`, which may clear undo history; use it only after the
-user explicitly asks to discard the current setup. Open or select the intended
-session before writing. Do not substitute a visually similar Graph construction
-for an unsupported operation.
-Read [the MCP tool reference](references/mcp-tool-reference.md) when an exact
-argument range or current feature boundary matters.
+## Scope controls and verify the requested result
+
+Resolve a volume/solo/mute request to input, output, master, Merge branch, Strip
+slot or hosted parameter before selecting a tool. Set explicit values and flag
+states rather than toggling. Account for selection/Q-Link/Multi Link before
+writes so unrelated channels or copies are not changed. Hosted parameters use
+listed IDs, layout tokens and normalized values; display units are not a linear
+normalization rule. Read the controls reference when making these changes.
+
+Verify the affected topology, widths, effective parameters/flags, preserved
+neighboring routes and identities. For layout, use the paged coordinate planner/executor in layout.md: native
+capability preflight, lightweight inventory, one bounded preview, atomic delta
+apply and complete coordinate/semantic-wire readback. Renderer quality coverage
+and actual rendered bounds remain distinct from stored anchors/sizes. MCP state alone does not
+prove listening, realtime performance, native-editor visibility or DAW acceptance.
+For partial failure, inspect the last confirmed state and choose a bounded
+recovery; undo/redo requires fresh identities and tokens afterward.
+
+## Deterministic Graph planning
+
+[scripts/graph_plan.py](scripts/graph_plan.py) can generate composable offline
+plans or execute exact steps through one persistent stdio connection:
+
+```sh
+python3 .agents/skills/chlora-operation/scripts/graph_plan.py --state current.json --spec recipe.json --output plan.json
+python3 .agents/skills/chlora-operation/scripts/graph_plan.py --apply plan.json --socket /absolute/current-host.sock --socket-identity DEV:INO --transcript unique.jsonl --output receipt.json
+```
+
+The second form performs authorized writes. Use the socket for the verified
+current Host, not a remembered PID. The helper rejects a changed initial binding,
+checks schemas, stops at failure and does not replay writes. Its finite templates
+are described in fastpaths; explicit native steps cover other supported Graph
+operations. Planned checks are intent, not a success certificate. Standalone
+Strip/session workflows use MCP directly rather than this Graph-centered planner.

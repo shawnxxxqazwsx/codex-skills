@@ -1,0 +1,6 @@
+interface:
+  display_name: "Orchestrator"
+  short_description: "Route parallel work by difficulty to GPT-6.1 Sol and GPT-6 Luna"
+  default_prompt: "Use $orchestrator to run independent packages concurrently within available capacity, route by task difficulty to GPT-6 Luna max or GPT-6.1 Sol medium/high, and retain safe integration ownership."
+policy:
+  allow_implicit_invocation: true

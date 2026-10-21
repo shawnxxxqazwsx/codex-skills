@@ -62,15 +62,31 @@ def public_text(text):
     return text
 
 
+def source_roots(personal_root, project_root, extra_projects):
+    sources = [(personal_root, 'personal/skills'),
+               (project_root / '.agents/skills', 'projects/mc-patcher/skills')]
+    names = {'mc-patcher'}
+    for spec in extra_projects:
+        name, separator, path = spec.partition('=')
+        if not separator or not path or not re.fullmatch(r'[a-z0-9][a-z0-9_-]*', name):
+            raise ValueError('Extra project must use a safe NAME=CHECKOUT format')
+        if name in names:
+            raise ValueError(f'Duplicate project scope: {name}')
+        names.add(name)
+        sources.append((Path(path) / '.agents/skills', f'projects/{name}/skills'))
+    return sources
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--personal-root', type=Path, required=True)
     parser.add_argument('--project-root', type=Path, required=True,
                         help='mc-patcher checkout containing .agents/skills')
+    parser.add_argument('--extra-project', action='append', default=[],
+                        metavar='NAME=CHECKOUT', help='Additional named project skill scope; repeatable')
     parser.add_argument('--write', action='store_true')
     args = parser.parse_args()
-    sources = [(args.personal_root, 'personal/skills'),
-               (args.project_root / '.agents/skills', 'projects/mc-patcher/skills')]
+    sources = source_roots(args.personal_root, args.project_root, args.extra_project)
     exports = {}
     modes = {}
     skills = []

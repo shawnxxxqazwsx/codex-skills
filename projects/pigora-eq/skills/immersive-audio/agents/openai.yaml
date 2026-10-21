@@ -1,0 +1,6 @@
+interface:
+  display_name: "Immersive Audio"
+  short_description: "Research spatial-audio systems and workflows"
+  default_prompt: "Use $immersive-audio to analyze this spatial-audio question with current primary sources."
+policy:
+  allow_implicit_invocation: true

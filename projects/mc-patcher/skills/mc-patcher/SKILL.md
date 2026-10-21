@@ -65,10 +65,7 @@ Read [references/verification.md](references/verification.md) before selecting
 exact CMake/CTest targets, local plug-in probes, deployment steps, or a DAW
 matrix.
 
-For Pigora response or control integration, read
-[references/pigora-handoff.md](references/pigora-handoff.md). Response fitting
-and evidence decisions remain owned by `pigora-public-fit-training`; do not
-repeat its source search for an unchanged, hash-bound integration handoff.
+Pigora source, fitting contracts and product-specific verification now live in the independent local `pigora-eq` project. Use that project’s skills and `references/pigora-handoff.md`; do not resume its work from the Clara checkout.
 
 | Change | Minimum evidence |
 |---|---|

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audio Render Forensics"
+  short_description: "Detailed residual, distortion, GR and response comparison"
+  default_prompt: "Use $audio-render-forensics to compare an original, a target render, and my current render with aligned residual, GR, nonlinear, frequency, dynamics, correlation, and plots."
