@@ -101,8 +101,9 @@ Trusted: `arxiv.org/abs/`, `arxiv.org/pdf/`, `doi.org/`, `aclanthology.org/`, `o
 ## Multi-step checklist
 
 ```
-[ ] Follow SKILL.md Parallel research: at least 3 independent search sub-agents; lead excluded
-[ ] Dispatch all 3 before waiting; search tasks run in parallel
+[ ] Follow SKILL.md Parallel research: at least 3 independent Gemini Flash 3.8 search sub-agents; lead excluded
+[ ] Dispatch all 3 Agent calls (subagent_type: "magpie-gemini-flash", no model) in one message before waiting
+[ ] Read each Flash agent's route receipt; only verified ones count as Flash-executed
 [ ] Collect reports from 3 different search sub-agents, including documented no-result reports
 [ ] Identity anchors if name collision
 [ ] Official → practical → academic as needed

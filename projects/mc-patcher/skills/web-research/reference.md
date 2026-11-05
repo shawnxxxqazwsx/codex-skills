@@ -101,12 +101,17 @@ Trusted: `arxiv.org/abs/`, `arxiv.org/pdf/`, `doi.org/`, `aclanthology.org/`, `o
 ## Multi-step checklist
 
 ```
-[ ] 2–4 sub-questions when broad
+[ ] Follow SKILL.md Parallel research: at least 3 independent Gemini Flash 3.8 search sub-agents; lead excluded
+[ ] Dispatch all 3 Agent calls (subagent_type: "magpie-gemini-flash", no model) in one message before waiting
+[ ] Read each Flash agent's route receipt; only verified ones count as Flash-executed
+[ ] Collect reports from 3 different search sub-agents, including documented no-result reports
 [ ] Identity anchors if name collision
 [ ] Official → practical → academic as needed
-[ ] Fetch every cited URL
+[ ] Lead opens and verifies every final cited URL
 [ ] Media: mid-frame before cite
+[ ] Lead deduplicates claims and sources, resolves conflicts from evidence, and synthesizes
 [ ] Conflicts explicit; near-misses → 易混淆 only
+[ ] Record agent IDs, roles, query records and returns; disclose any unmet parallel requirement
 ```
 
 ---

@@ -49,7 +49,14 @@ A candidate package is safe to delegate when all are true:
   external destination.
 - Its result can be accepted at a handoff point without continuous
   coordination.
-- Its expected evidence or delivery value exceeds delegation and review cost.
+- It has a useful deliverable; optional supporting fan-out should justify its
+  delegation and review cost.
+
+For qualifying non-frontend code packages, apply the Argon default in
+[model-routing.md](model-routing.md#choose-the-lane). Use cost to size and bundle
+related steps, not to keep a small, independently acceptable fix local. This
+rubric governs safe decomposition and concurrency; it does not replace that
+execution default.
 
 Risk or uncertainty can justify an independent review, but does not by itself
 make implementation parallel. If the work is inseparable, keep one writer and
@@ -64,16 +71,22 @@ Good independent packages include:
 - implementing an isolated component behind a frozen interface;
 - adding a focused regression, fixture, probe, or migration artifact;
 - preparing a bounded evidence, documentation, or release artifact;
+- executing an authorized integration, deployment, or UI action under an
+  explicit single-writer lease;
 - reviewing a stable diff against named acceptance questions.
 
-Do not delegate cheap listing, routine user communication, shared integration,
-or a task whose only outcome is a generic recommendation. The primary should
-perform cheap ownership inspection directly.
+Do not delegate cheap listing, routine user communication, or a task whose only
+outcome is a generic recommendation. Shared integration is delegable when the
+primary owns the interface and resource decision and grants one explicit
+execution lease to a single writer; never split one mutable integration across
+writers. The primary should perform cheap ownership inspection directly.
 
 ## Reassess and hand off
 
 Reapply the gates after diagnosis, first green behavior, and repeated failed
-attempts. Discovery, implementation, and review are distinct assignments.
+attempts. Phase acceptance does not require a new worker or dispatch: discovery,
+implementation, and related tests may stay in one bounded Argon package.
+Required independent review still needs a non-author reviewer.
 Before accepting a handoff, inspect the artifact, its evidence, changed paths,
 and validation result. Release the lane only after integration no longer needs
 its resources.
