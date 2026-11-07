@@ -45,14 +45,14 @@ installation receipt as proof that an already-running process changed.
 
 Check the frontend exclusion before dispatch; a clean diff afterward cannot
 justify sending a frontend write task to a delegated subagent. For eligible
-backend-only Argon (`magpie-gemini`) work, also inspect the actual diff and
+backend-only Argon, DeepSeek, or Grok work, also inspect the actual diff and
 generated outputs for forbidden frontend changes. If any appear, withhold
 acceptance and arrange a local correction that preserves pre-existing work; do
 not send the frontend correction to a subagent.
 
 A leased worker's completion message is a claim, not acceptance. Inspect the
 actual files, diff, command output, and raw failure text on disk. For every
-`magpie-*` worker (Argon, Gemini Flash), including read-only review and
+`magpie-*` worker (Argon, DeepSeek, Gemini Flash) and each Grok worker, including read-only review and
 research packages, read its entry in
 `~/.claude/state/magpie-routing/<session_id>.json`; only `status: verified`
 establishes the route that ran (see
@@ -70,5 +70,6 @@ before any retry instead of resending a task that may already have executed.
 For interaction, performance, visual, hardware, security, or external-service
 claims, preserve the actual observation conditions and evidence. A unit test,
 mock, screenshot, or static inspection may localize a problem without proving
-the reported integrated behavior. Use a non-author reviewer where an
-independent judgment is part of the acceptance contract.
+the reported integrated behavior. The primary performs the final review. Add a
+non-author reviewer only when the user explicitly asks for an independent
+second review.

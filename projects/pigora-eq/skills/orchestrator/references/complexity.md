@@ -52,15 +52,17 @@ A candidate package is safe to delegate when all are true:
 - It has a useful deliverable; optional supporting fan-out should justify its
   delegation and review cost.
 
-For qualifying non-frontend code packages, apply the Argon default in
-[model-routing.md](model-routing.md#choose-the-lane). Use cost to size and bundle
+For qualifying non-frontend code packages, apply the remaining-quota proportion
+for Argon, DeepSeek, and Grok in
+[model-routing.md](model-routing.md#quota-proportion-for-code-packages). The
+primary keeps the analysis, command, and final review. Use cost to size and bundle
 related steps, not to keep a small, independently acceptable fix local. This
 rubric governs safe decomposition and concurrency; it does not replace that
 execution default.
 
-Risk or uncertainty can justify an independent review, but does not by itself
-make implementation parallel. If the work is inseparable, keep one writer and
-schedule review after the artifact stabilizes.
+Risk or uncertainty does not by itself make implementation parallel, and it
+does not move the analysis or final review off the primary. If the work is
+inseparable, keep one writer. The primary reviews after the artifact stabilizes.
 
 ## Choose useful delivery types
 
@@ -73,7 +75,7 @@ Good independent packages include:
 - preparing a bounded evidence, documentation, or release artifact;
 - executing an authorized integration, deployment, or UI action under an
   explicit single-writer lease;
-- reviewing a stable diff against named acceptance questions.
+- reviewing a stable diff only when the user asks for an independent second review.
 
 Do not delegate cheap listing, routine user communication, or a task whose only
 outcome is a generic recommendation. Shared integration is delegable when the
@@ -84,9 +86,10 @@ writers. The primary should perform cheap ownership inspection directly.
 ## Reassess and hand off
 
 Reapply the gates after diagnosis, first green behavior, and repeated failed
-attempts. Phase acceptance does not require a new worker or dispatch: discovery,
-implementation, and related tests may stay in one bounded Argon package.
-Required independent review still needs a non-author reviewer.
+attempts. Phase acceptance does not require a new worker or dispatch: the
+primary keeps the analysis, and implementation plus related tests may stay in
+one bounded Argon, DeepSeek, or Grok package. The primary performs the final
+review. A non-author subagent review is only for an explicit user request.
 Before accepting a handoff, inspect the artifact, its evidence, changed paths,
 and validation result. Release the lane only after integration no longer needs
 its resources.
